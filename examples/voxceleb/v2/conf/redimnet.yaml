@@ -28,11 +28,11 @@ dataset_args:
     max_num_frames: 800
   resample_rate: 16000
   speed_perturb: True
-  num_frms: 200
+  num_frms: 134
   aug_prob: 0.6 # prob to add reverb & noise aug per sample
   fbank_args:
     num_mel_bins: 72
-    frame_shift: 10
+    frame_shift: 15
     frame_length: 25
     dither: 1.0
   spec_aug: False
