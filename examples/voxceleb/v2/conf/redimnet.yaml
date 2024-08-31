@@ -51,12 +51,10 @@ model_args:
   pooling_func: "ASTP" # TSTP, ASTP, MQMHASTP
   two_emb_layer: False
 
-
 projection_args:
   project_type: "arc_margin" # add_margin, arc_margin, sphere, sphereface2, softmax, arc_margin_intertopk_subcenter
   scale: 32.0
   easy_margin: False
-
 
 margin_scheduler: MarginScheduler
 margin_update:
@@ -76,6 +74,7 @@ optimizer_args:
   momentum: 0.9
   nesterov: True
   weight_decay: 2.0e-05
+head_weight_decay_mult: 5
 
 scheduler: ExponentialDecrease
 scheduler_args:

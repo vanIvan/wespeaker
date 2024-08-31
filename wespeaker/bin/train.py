@@ -178,9 +178,21 @@ def train(config='conf/config.yaml', **kwargs):
         logger.info("loss criterion is: " + configs['loss'])
 
     configs['optimizer_args']['lr'] = configs['scheduler_args']['initial_lr']
-    optimizer = getattr(torch.optim,
-                        configs['optimizer'])(ddp_model.parameters(),
-                                              **configs['optimizer_args'])
+
+    backbone_params = []
+    projection_params = []
+    for name, param in ddp_model.named_parameters():
+        if in name.statrtswith("projection."):
+            projection_params.append(param)
+        else:
+            backbone_params.append(param)
+
+    default_weight_decay = configs['optimizer_args']['weight_decay']
+    optimizer = getattr(torch.optim,configs['optimizer'])(
+            {'params': backbone_params, 'weight_decay': default_weight_decay},
+            {'params': projection_params, 'weight_decay': default_weight_decay * configs['optimizer_args'].get('head_weight_decay_mult',1.0)},
+        **configs['optimizer_args'])
+
     if rank == 0:
         logger.info("<== Optimizer ==>")
         logger.info("optimizer is: " + configs['optimizer'])
